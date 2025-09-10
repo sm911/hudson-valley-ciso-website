@@ -1,0 +1,203 @@
+name: Deploy Pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  pre-deployment-checks:
+    name: Pre-deployment Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm run test:run
+      
+      - name: TypeScript check
+        run: npm run check
+      
+      - name: Security audit
+        run: npm audit --production --audit-level=high
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: pre-deployment-checks
+    if: github.event.inputs.environment == 'staging' || (github.ref == 'refs/heads/develop' && github.event_name == 'push')
+    environment:
+      name: staging
+      url: https://staging.hudsonvalleyciso.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --production
+      
+      - name: Build for staging
+        run: npm run build
+        env:
+          NODE_ENV: staging
+          VITE_API_URL: ${{ secrets.STAGING_API_URL }}
+          VITE_APP_URL: ${{ secrets.STAGING_APP_URL }}
+      
+      - name: Deploy to staging server
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your staging deployment commands here
+          # Example: rsync, scp, or cloud provider CLI
+      
+      - name: Run smoke tests
+        run: |
+          echo "Running smoke tests on staging..."
+          # Add smoke test commands here
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: pre-deployment-checks
+    if: github.event.inputs.environment == 'production' || (github.ref == 'refs/heads/main' && github.event_name == 'push')
+    environment:
+      name: production
+      url: https://hudsonvalleyciso.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install production dependencies
+        run: npm ci --production
+      
+      - name: Build for production
+        run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_API_URL: ${{ secrets.PRODUCTION_API_URL }}
+          VITE_APP_URL: ${{ secrets.PRODUCTION_APP_URL }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+      
+      - name: Create deployment package
+        run: |
+          tar -czf deploy-package.tar.gz \
+            dist/ \
+            client/dist/ \
+            package.json \
+            package-lock.json
+      
+      - name: Deploy to production server
+        run: |
+          echo "Deploying to production environment..."
+          # Add your production deployment commands here
+          # Example for cloud providers:
+          # - AWS: aws s3 sync, aws elasticbeanstalk deploy
+          # - Google Cloud: gcloud app deploy
+          # - Azure: az webapp deploy
+          # - Vercel: vercel --prod
+          # - Netlify: netlify deploy --prod
+      
+      - name: Verify deployment
+        run: |
+          echo "Verifying production deployment..."
+          # Add health check commands here
+          # curl -f https://hudsonvalleyciso.com/health || exit 1
+      
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "Deployment successful!"
+            # Add notification logic (Slack, email, etc.)
+          else
+            echo "Deployment failed!"
+            # Add failure notification logic
+          fi
+
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: failure() && (github.event.inputs.environment == 'production' || github.ref == 'refs/heads/main')
+    needs: deploy-production
+    
+    steps:
+      - name: Checkout previous release
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.before }}
+      
+      - name: Rollback to previous version
+        run: |
+          echo "Rolling back to previous version..."
+          # Add rollback commands here
+      
+      - name: Notify rollback
+        run: |
+          echo "Rollback initiated due to deployment failure"
+          # Add rollback notification logic
+
+  post-deployment:
+    name: Post-deployment Tasks
+    runs-on: ubuntu-latest
+    if: success()
+    needs: [deploy-staging, deploy-production]
+    
+    steps:
+      - name: Clear CDN cache
+        run: |
+          echo "Clearing CDN cache..."
+          # Add CDN cache clearing commands
+      
+      - name: Update monitoring
+        run: |
+          echo "Updating monitoring dashboards..."
+          # Add monitoring update commands
+      
+      - name: Create release notes
+        run: |
+          echo "Creating release notes..."
+          # Add release notes generation

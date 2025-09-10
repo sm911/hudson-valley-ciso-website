@@ -4,12 +4,29 @@ import { storage } from "./storage";
 import { insertContactSchema, insertNewsletterSchema, insertStarterKitSchema } from "@shared/schema";
 import { sendContactEmail, sendStarterKitEmail } from "./email";
 import { z } from "zod";
+import { rateLimiters, sanitizeInput } from "./security";
+import logger, { logEmail, logError, logSecurity } from "./logger";
+import { registerSecurityMonitoring } from "./security-monitoring";
+import { registerRateLimitRoutes } from "./rate-limit-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Contact form submission
-  app.post("/api/contact", async (req, res) => {
+  // Register security monitoring endpoints
+  registerSecurityMonitoring(app);
+  
+  // Register rate limit management endpoints
+  registerRateLimitRoutes(app);
+  // Contact form submission with rate limiting
+  app.post("/api/contact", rateLimiters.contact, async (req, res) => {
     try {
-      const validatedData = insertContactSchema.parse(req.body);
+      // Sanitize input before validation
+      const sanitizedBody = {
+        ...req.body,
+        name: sanitizeInput(req.body.name || ''),
+        message: sanitizeInput(req.body.message || ''),
+        company: req.body.company ? sanitizeInput(req.body.company) : undefined,
+      };
+      
+      const validatedData = insertContactSchema.parse(sanitizedBody);
       
       // Store the contact in our database
       const contact = await storage.createContact(validatedData);
@@ -28,39 +45,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       if (!emailSent) {
-        console.error("Failed to send email notification, but contact was saved");
+        logEmail('contact-notification', validatedData.email, false, {
+          reason: 'Failed to send email notification, but contact was saved'
+        });
+      } else {
+        logEmail('contact-notification', validatedData.email, true);
       }
       
       res.json({ success: true, id: contact.id, emailSent });
     } catch (error) {
-      console.error("Contact form error:", error);
+      logError(error as Error, 'Contact form submission');
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error: "Invalid form data", details: error.errors });
+        logSecurity('Invalid contact form data attempted', { errors: error.errors });
+        res.status(400).json({ error: "Invalid form data" });
       } else {
         res.status(500).json({ error: "Failed to submit contact form" });
       }
     }
   });
 
-  // Newsletter subscription
-  app.post("/api/newsletter", async (req, res) => {
+  // Newsletter subscription with rate limiting
+  app.post("/api/newsletter", rateLimiters.newsletter, async (req, res) => {
     try {
-      const validatedData = insertNewsletterSchema.parse(req.body);
+      const sanitizedEmail = req.body.email ? sanitizeInput(req.body.email) : '';
+      const validatedData = insertNewsletterSchema.parse({ email: sanitizedEmail });
       const subscriber = await storage.subscribeToNewsletter(validatedData);
       res.json({ success: true, id: subscriber.id });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error: "Invalid email address", details: error.errors });
+        logSecurity('Invalid newsletter subscription attempted', { errors: error.errors });
+        res.status(400).json({ error: "Invalid email address" });
       } else {
+        logError(error as Error, 'Newsletter subscription');
         res.status(500).json({ error: "Failed to subscribe to newsletter" });
       }
     }
   });
 
-  // Starter Kit download endpoint
-  app.post("/api/starter-kit", async (req, res) => {
+  // Starter Kit download endpoint with rate limiting
+  app.post("/api/starter-kit", rateLimiters.starterKit, async (req, res) => {
     try {
-      const validatedData = insertStarterKitSchema.parse(req.body);
+      // Sanitize input
+      const sanitizedBody = {
+        email: sanitizeInput(req.body.email || ''),
+        name: req.body.name ? sanitizeInput(req.body.name) : undefined,
+        company: req.body.company ? sanitizeInput(req.body.company) : undefined,
+      };
+      
+      const validatedData = insertStarterKitSchema.parse(sanitizedBody);
       
       // Store the download request in our database
       const download = await storage.createStarterKitDownload(validatedData);
@@ -76,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ success: false, error: 'Failed to send starter kit email' });
       }
 
-      console.log(`Starter kit sent successfully to: ${validatedData.email}`);
+      logEmail('starter-kit', validatedData.email, true);
       
       res.json({ 
         success: true, 
@@ -84,9 +116,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         emailSent: true 
       });
     } catch (error) {
-      console.error('Starter kit request error:', error);
+      logError(error as Error, 'Starter kit request');
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error: "Invalid form data", details: error.errors });
+        logSecurity('Invalid starter kit request', { errors: error.errors });
+        res.status(400).json({ error: "Invalid form data" });
       } else {
         res.status(500).json({ error: 'Failed to process starter kit request' });
       }

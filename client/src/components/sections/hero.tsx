@@ -49,7 +49,7 @@ export function Hero() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button size="lg" className="!bg-white hover:!bg-gray-50 !text-black !border-2 !border-black shadow-elegant-lg hover:shadow-elegant-xl transition-all duration-300 transform hover:-translate-y-0.5">
+              <Button size="lg" className="!bg-white hover:!bg-gray-50 !text-blue-600 !border-2 !border-blue-600 shadow-elegant-lg hover:shadow-elegant-xl transition-all duration-300 transform hover:-translate-y-0.5">
                 <Calendar className="w-5 h-5 mr-3" />
                 Schedule a Strategic Security Consultation
               </Button>

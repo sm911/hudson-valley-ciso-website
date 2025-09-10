@@ -7,6 +7,10 @@ export const SITE_CONFIG = {
     phone: import.meta.env.VITE_CONTACT_PHONE || "845-418-8823",
   },
   calendarLink: import.meta.env.VITE_CALENDAR_LINK || "https://calendly.com/cyberintelpros",
+  blogs: {
+    cloudArchitecture: "https://cloud-architecture.blog/",
+    dataSecurity: "https://data-security.blog/",
+  },
 };
 
 export const TRUST_BADGES = [

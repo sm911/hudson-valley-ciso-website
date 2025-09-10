@@ -1,11 +1,20 @@
 import { MailService } from '@sendgrid/mail';
+import logger, { logEmail, logError } from './logger';
 
-if (!process.env.SENDGRID_API_KEY) {
-  throw new Error("SENDGRID_API_KEY environment variable must be set");
+// Only require SendGrid API key in production
+const isDevelopment = process.env.NODE_ENV === 'development';
+const hasApiKey = !!process.env.SENDGRID_API_KEY;
+
+if (!isDevelopment && !hasApiKey) {
+  throw new Error("SENDGRID_API_KEY environment variable must be set in production");
 }
 
 const mailService = new MailService();
-mailService.setApiKey(process.env.SENDGRID_API_KEY);
+if (hasApiKey) {
+  mailService.setApiKey(process.env.SENDGRID_API_KEY);
+} else {
+  console.warn('⚠️  SendGrid API key not configured - emails will be simulated in development mode');
+}
 
 interface ContactEmailParams {
   name: string;
@@ -26,6 +35,19 @@ interface StarterKitEmailParams {
 }
 
 export async function sendStarterKitEmail(params: StarterKitEmailParams): Promise<boolean> {
+  // In development without API key, just log the email
+  if (!hasApiKey) {
+    console.log('📧 [DEV MODE] Would send starter kit email to:', params.email);
+    logEmail({
+      type: 'starter-kit',
+      to: params.email,
+      from: 'support@hvciso.com',
+      subject: 'Security Starter Kit Request',
+      params
+    });
+    return true;
+  }
+
   try {
     const emails = [
       // Email to user with starter kit
@@ -137,15 +159,30 @@ This person has downloaded the security starter kit and may be a potential lead 
     ];
 
     await mailService.send(emails);
-    console.log(`Starter kit emails sent successfully to: ${params.email}`);
+    logger.info('Starter kit emails sent successfully', { 
+      recipient: params.email.substring(0, 2) + '***@' + params.email.split('@')[1] 
+    });
     return true;
   } catch (error) {
-    console.error('Starter kit email error:', error);
+    logError(error as Error, 'Starter kit email sending');
     return false;
   }
 }
 
 export async function sendContactEmail(params: ContactEmailParams): Promise<boolean> {
+  // In development without API key, just log the email
+  if (!hasApiKey) {
+    console.log('📧 [DEV MODE] Would send contact email from:', params.email);
+    logEmail({
+      type: 'contact',
+      to: 'support@hvciso.com',
+      from: params.email,
+      subject: `Contact form submission from ${params.name}`,
+      params
+    });
+    return true;
+  }
+
   try {
     // Determine priority and routing tags
     const isUrgent = params.timeline === "urgent" || params.isActiveIncident;
@@ -207,10 +244,10 @@ Direct reply will reach: ${params.email}
     for (const emailOptions of senderOptions) {
       try {
         await mailService.send(emailOptions);
-        console.log('Email sent successfully with sender:', emailOptions.from);
+        logger.info('Contact email sent successfully', { from: emailOptions.from });
         return true;
       } catch (error: any) {
-        console.log(`Failed with sender ${emailOptions.from}:`, error.message);
+        logger.warn(`Failed to send email with sender ${emailOptions.from}`, { error: error.message });
         continue;
       }
     }
@@ -218,7 +255,7 @@ Direct reply will reach: ${params.email}
     // If all options fail, throw the last error
     throw new Error('All email sender options failed');
   } catch (error) {
-    console.error('SendGrid email error:', error);
+    logError(error as Error, 'SendGrid email service');
     return false;
   }
 }

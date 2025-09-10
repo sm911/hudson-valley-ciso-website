@@ -1,7 +1,8 @@
-import { User, CheckCircle, ExternalLink, Shield, Award, Briefcase } from "lucide-react";
+import { User, CheckCircle, ExternalLink, Shield, Award, Briefcase, BookOpen } from "lucide-react";
 import { SiLinkedin } from "react-icons/si";
 import { CredentialAccordion } from "@/components/ui/credential-accordion";
 import { generateMetaTags } from "@/lib/seo";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export default function About() {
   return (
@@ -76,6 +77,47 @@ export default function About() {
                       <span className="text-sm font-medium text-gray-900">CCSP</span>
                       <span className="text-xs text-gray-600">Cloud Security</span>
                     </div>
+                  </div>
+                </div>
+                
+                {/* Blog Links Section */}
+                <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2 text-primary-600" />
+                    Thought Leadership & Insights
+                  </h4>
+                  <p className="text-gray-600 mb-4 text-sm">
+                    Stay current with industry best practices through my technical blogs:
+                  </p>
+                  <div className="space-y-3">
+                    <a 
+                      href={SITE_CONFIG.blogs.cloudArchitecture}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg hover:from-blue-100 hover:to-indigo-100 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium text-gray-900">Cloud Architecture Blog</span>
+                          <p className="text-xs text-gray-600 mt-1">Enterprise cloud security patterns and practices</p>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-primary-600" />
+                      </div>
+                    </a>
+                    <a 
+                      href={SITE_CONFIG.blogs.dataSecurity}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg hover:from-green-100 hover:to-emerald-100 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium text-gray-900">Data Security Blog</span>
+                          <p className="text-xs text-gray-600 mt-1">Data protection strategies and compliance insights</p>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-primary-600" />
+                      </div>
+                    </a>
                   </div>
                 </div>
 

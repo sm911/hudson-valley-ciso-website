@@ -2,15 +2,25 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import path from "path";
+import dotenv from "dotenv";
+import { applySecurityMiddleware } from "./security";
+import logger, { logApiCall } from "./logger";
 
+// Load environment variables
+dotenv.config();
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
+// Apply security middleware BEFORE body parsers
+applySecurityMiddleware(app);
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+
+// Enhanced API logging with Winston
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
+  const requestPath = req.path;
   let capturedJsonResponse: Record<string, any> | undefined = undefined;
 
   const originalResJson = res.json;
@@ -21,17 +31,25 @@ app.use((req, res, next) => {
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+    if (requestPath.startsWith("/api")) {
+      // Use Winston logger instead of console.log
+      logApiCall(req.method, requestPath, res.statusCode, duration, {
+        ip: req.ip,
+        userAgent: req.get('user-agent'),
+        responseSize: res.get('content-length'),
+      });
+      
+      // Keep the old log for Vite compatibility in development
+      if (process.env.NODE_ENV === 'development') {
+        let logLine = `${req.method} ${requestPath} ${res.statusCode} in ${duration}ms`;
+        if (capturedJsonResponse && logLine.length < 80) {
+          logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+        }
+        if (logLine.length > 80) {
+          logLine = logLine.slice(0, 79) + "…";
+        }
+        log(logLine);
       }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
     }
   });
 
@@ -57,12 +75,25 @@ app.use('/downloads', express.static(path.join(process.cwd(), 'client/public/dow
 (async () => {
   const server = await registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
+    // Log errors with Winston
+    logger.error(`Error handling request ${req.method} ${req.path}`, {
+      error: err.message,
+      stack: err.stack,
+      status,
+      ip: req.ip,
+      userAgent: req.get('user-agent'),
+    });
+
+    // Don't expose internal error details to client in production
+    const clientMessage = process.env.NODE_ENV === 'production' && status === 500
+      ? 'Internal Server Error'
+      : message;
+
+    res.status(status).json({ message: clientMessage });
   });
 
   // importantly only setup vite in development and after

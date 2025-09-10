@@ -78,6 +78,16 @@ export function Footer() {
                   FAQ
                 </Link>
               </li>
+              <li className="pt-2 border-t border-gray-800">
+                <a href={SITE_CONFIG.blogs.cloudArchitecture} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Cloud Architecture Blog →
+                </a>
+              </li>
+              <li>
+                <a href={SITE_CONFIG.blogs.dataSecurity} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Data Security Blog →
+                </a>
+              </li>
             </ul>
           </div>
           

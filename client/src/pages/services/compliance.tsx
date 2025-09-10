@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowLeft, Calendar, CheckCircle, FileCheck } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle, FileCheck, ExternalLink, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateMetaTags } from "@/lib/seo";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -187,6 +187,43 @@ export default function Compliance() {
                     <li>• Regulatory confidence and protection</li>
                   </ul>
                 </div>
+              </div>
+            </div>
+            
+            {/* Blog Resources Section */}
+            <div className="mt-12 p-6 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-primary-600" />
+                Deep Dive: Compliance & Security Resources
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Explore detailed compliance frameworks and implementation strategies:
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <a 
+                  href={SITE_CONFIG.blogs.dataSecurity}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-white rounded-lg hover:shadow-md transition-all group"
+                >
+                  <div>
+                    <span className="font-medium text-gray-900 group-hover:text-primary-600">Data Security Blog</span>
+                    <p className="text-xs text-gray-600 mt-1">GDPR, CCPA, and privacy compliance guides</p>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary-600" />
+                </a>
+                <a 
+                  href={SITE_CONFIG.blogs.cloudArchitecture}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-white rounded-lg hover:shadow-md transition-all group"
+                >
+                  <div>
+                    <span className="font-medium text-gray-900 group-hover:text-primary-600">Cloud Architecture Blog</span>
+                    <p className="text-xs text-gray-600 mt-1">SOC 2 and cloud compliance best practices</p>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary-600" />
+                </a>
               </div>
             </div>
           </div>

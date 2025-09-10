@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowLeft, Calendar, CheckCircle } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle, ExternalLink, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateMetaTags } from "@/lib/seo";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -21,10 +21,13 @@ export default function FractionalCISO() {
             </Link>
             
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Fractional CISO Leadership
+              vCISO / Fractional CISO Leadership
             </h1>
-            <p className="text-xl text-gray-600 mb-12">
+            <p className="text-xl text-gray-600 mb-4">
               Executive-level security leadership with hands-on involvement—right-sized to your budget and business goals.
+            </p>
+            <p className="text-base text-gray-500 italic mb-12">
+              Note: vCISO and Fractional CISO are the same service - we use the terms interchangeably.
             </p>
 
             <div className="grid lg:grid-cols-2 gap-12 mb-16">
@@ -120,7 +123,7 @@ export default function FractionalCISO() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-8">
+            <div className="bg-gray-50 rounded-xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Typical Monthly Deliverables</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
@@ -141,6 +144,40 @@ export default function FractionalCISO() {
                     <li>• Incident response planning</li>
                   </ul>
                 </div>
+              </div>
+            </div>
+            
+            {/* Blog Resources Section */}
+            <div className="border-t pt-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-primary-600" />
+                Learn More: Industry Best Practices
+              </h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <a 
+                  href={SITE_CONFIG.blogs.cloudArchitecture}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all group"
+                >
+                  <div>
+                    <span className="font-medium text-gray-900 group-hover:text-primary-600">Cloud Security Architecture</span>
+                    <p className="text-xs text-gray-600 mt-1">Modern cloud security patterns and frameworks</p>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary-600" />
+                </a>
+                <a 
+                  href={SITE_CONFIG.blogs.dataSecurity}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all group"
+                >
+                  <div>
+                    <span className="font-medium text-gray-900 group-hover:text-primary-600">Data Protection Strategies</span>
+                    <p className="text-xs text-gray-600 mt-1">Compliance and data governance insights</p>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary-600" />
+                </a>
               </div>
             </div>
           </div>
