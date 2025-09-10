@@ -3,14 +3,6 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import path from "path";
 
-// Verify Twilio credentials are available
-const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
-const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-if (!twilioAccountSid || !twilioAuthToken) {
-  console.warn("Warning: Twilio credentials not configured. SMS functionality will not work.");
-} else {
-  console.log("Twilio credentials configured");
-}
 
 const app = express();
 app.use(express.json());
