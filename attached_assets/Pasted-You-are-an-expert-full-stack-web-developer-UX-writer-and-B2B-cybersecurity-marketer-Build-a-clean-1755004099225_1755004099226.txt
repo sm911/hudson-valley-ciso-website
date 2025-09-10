@@ -1,0 +1,257 @@
+You are an expert full‑stack web developer, UX writer, and B2B cybersecurity marketer. Build a clean, fast, accessible, conversion‑focused Next.js site for hudsonvalleyciso.com. The site educates and converts SMBs (<100 employees) in the Hudson Valley, NY who may not know what a CISO or fractional CISO is. Prioritize clarity, outcomes, trust, and a low‑friction path to “Book a consultation.”
+
+Key focus: outcome-first, minimal credentials, mature tone
+
+Replace exhaustive credential dumps with a concise credibility bar:
+
+“Led security and compliance initiatives across cloud and data platforms”
+
+“Decades of experience aligning cybersecurity with business goals”
+
+“Certified in security, privacy, and risk; recognized in cloud security”
+
+Show at most 4 credential badges sitewide (hover reveals details; full list on About page only, behind a “View full credentials” disclosure).
+
+For About: highlight leadership narrative and business alignment, not alphabet soup. Provide a linked “Credential index” accordions to avoid clutter.
+
+Positioning and promise
+
+Headline: “Fractional CISO for Hudson Valley SMBs”
+
+Subhead: “Board-level security leadership—right-sized to your budget and goals.”
+
+Value pillars:
+
+“Insurance-ready security” (pass cyber insurance and customer security reviews)
+
+“Practical roadmap” (prioritized, budget-aligned actions)
+
+“Reduced risk” (phishing, ransomware, vendor risk)
+
+“Clear reporting” (executive-friendly metrics, simple next steps)
+
+Social proof style: “Trusted by SMB leaders” with neutral iconography; no fabricated logos or testimonials.
+
+Education-first content (plain English)
+
+“What is a CISO?” explains: sets priorities, owns risk, translates security to business.
+
+“What is a Fractional CISO?” explains: part-time executive leadership; right-sized cost; coordinates MSPs/vendors; focuses on outcomes, not tools.
+
+“MSP vs vCISO vs Fractional CISO” comparison: roles, responsibilities, when to use which; empathetic tone, no disparagement.
+
+Service blueprint (CCISO adapted, no jargon)
+Organize services around SMB outcomes tied to the CCISO domains; write the copy as “problems → outcomes → what we do,” not domain names:
+
+Governance, Compliance, and Privacy (Outcome: “Fewer surprises and faster approvals”)
+
+Controls and Assurance (Outcome: “Evidence your controls, prepare audits”)
+
+Program and Operations (Outcome: “A simple plan, clear owners, steady progress”)
+
+Core Protections (Outcome: “The basics implemented well: identity, data, cloud”)
+
+Strategy, Budget, and Vendors (Outcome: “Spend on what matters; measure results”)
+Provide a one-paragraph translation of each domain into what SMB leaders actually get and feel.
+
+Subscription plans (no prices)
+
+Tiers: Starter, Standard, Comprehensive (no dollar figures). Each displays:
+
+“Best for” statement (e.g., first security leader, regulated, rapidly scaling)
+
+Baseline inclusions (discovery, policy essentials, insurance questionnaires, roadmap, executive reporting, IR playbook outline, awareness kickoff, KPI/KRI dashboard)
+
+Add-ons menu (IR retainer by custom agreement, tabletop, compliance readiness, vendor due diligence)
+
+CTA on every card: “Request a tailored quote” + “Book a consult” (Google Calendar link).
+
+First 90 days plan (set expectations)
+
+Weeks 1–2: Discovery, quick wins, risk snapshot
+
+Weeks 3–6: Roadmap, policy essentials, control baseline, IR playbooks
+
+Weeks 7–12: Implement priorities, train staff, report metrics
+
+Copy tone and structure
+
+Voice: calm, senior, helpful. No fearmongering. Avoid acronyms unless explained.
+
+Use “show, don’t tell” micro-copy: “You’ll leave each month with: 1-page executive summary, top 3 priorities, owner and due date.”
+
+Avoid tool talk; highlight decision frameworks and outcomes.
+
+Design and UX
+
+Clean layout, generous whitespace, high contrast, mobile-first.
+
+Primary CTAs: “Book a consultation” sticky header; “Request a tailored quote.”
+
+Trust bar with 3–4 badges (e.g., CISSP, CISM, CIPM, CCSP) and a “See full credentials” link on About.
+
+Region cues: subtle Hudson Valley imagery; keep it professional.
+
+Pages and IA
+
+Home: Hero, value pillars, quick explainer, services overview, trust bar, CTAs.
+
+Services: Overview of tiers and outcomes; link to detail pages:
+
+Fractional CISO Leadership
+
+Program Assessment & Roadmap
+
+Cyber Insurance Readiness
+
+Compliance Enablement (NIST CSF/ISO 27001/SOC 2 readiness)
+
+Vendor Risk Management
+
+Security Awareness & Phishing Program
+
+Incident Response Readiness & Tabletop (add-on, case-by-case retainer)
+
+Policy Development & Governance
+
+About: James Venuto—leadership story (IBM/public market experience reframed as “lessons learned for SMBs”), principles, limited badges, collapsible credential index.
+
+Industries: “We serve all SMB industries in the Hudson Valley.” Replace case studies with “common scenarios” tiles (e.g., healthcare practice needs HIPAA attestation support; manufacturer needs customer security reviews; SaaS needs SOC 2 readiness). No fake stories.
+
+Resources: 5 educational articles (non-technical), MDX-based, plus a downloadable “SMB Security Starter Kit” outline gated by simple email capture (optional).
+
+FAQs: scope, time commitment, onboarding flow, how tiers work, insurance questionnaires, MSP coordination, IR retainer on request, no pricing on site.
+
+Contact: short form + Google Calendar booking link + plain privacy notice.
+
+Legal: Privacy Policy, Terms, Accessibility Statement.
+
+Minimal credential strategy (based on your profile)
+
+Sitewide trust bar (4 badges max): CISSP, CISM, CIPM, CCSP.
+
+About page accordion “Full credentials” with your complete list, grouped by theme:
+
+Security leadership and risk (CISSP + concentrations, CISM, CRISC)
+
+Privacy and data (CIPM, CDPSE)
+
+Cloud and software (CCSP, CCSK, CSSLP, CCAK)
+
+Program and delivery (PMP, PMI-ACP, PSM I)
+
+CompTIA portfolio (group as “CompTIA advanced security and infrastructure stack”)
+
+Education (MS CS, MS EE; BS EE)
+
+Patents (list as “Networking and systems innovation” with concise titles)
+
+Rationale microcopy: “We highlight a few key credentials here—see the full list if you’re curious. Most SMBs care more about outcomes, so that’s our focus.”
+
+Framework, stack, and constraints
+
+Next.js App Router, TypeScript, Tailwind, MDX content, image optimization, sitemap/robots, security headers.
+
+Accessibility: WCAG 2.2 AA.
+
+SEO: JSON-LD for LocalBusiness/Organization, Service, FAQPage, Article. Titles/meta tuned to “Fractional CISO Hudson Valley,” “SMB cybersecurity,” “cyber insurance readiness.”
+
+Performance: Lighthouse 95+; minimize client JS; defer non-critical scripts.
+
+Security: HTTPS, strict headers; minimal cookies; privacy-first analytics placeholder.
+
+CMS-light: Content in /content MDX.
+
+Deliverables
+
+Full Next.js project scaffold + Tailwind + MDX + JSON-LD + security headers.
+
+Draft copy for all pages and 5 articles:
+
+What is a CISO? (SMB version)
+
+Fractional CISO vs MSP vs vCISO: Who does what?
+
+Cyber Insurance Readiness: What SMBs Need
+
+The First 90 Days with a Fractional CISO
+
+Security Program Basics for SMBs: A Practical Guide
+
+Downloadable “SMB Security Starter Kit” outline as MDX + printable PDF template.
+
+Components: Hero, Explainer, ServicesGrid, Comparison, ProcessTimeline, TrustBar, CredentialAccordion, CTA, FAQ, LeadForm.
+
+Contact form posts to serverless route; Google Calendar link as environment variable.
+
+README with setup, content editing, deployment.
+
+No pricing anywhere; “Contact for quote” language only.
+
+No fabricated testimonials or case studies.
+
+Microcopy and patterns to generate
+
+Outcome bullets everywhere: “Be insurance-ready,” “Pass customer security reviews,” “Cut through vendor risk,” “Reduce downtime risk.”
+
+Plain-English tooltips for any acronym.
+
+“What you get each month” list on Services pages.
+
+“Common scenarios” instead of case studies.
+
+“How we work with your MSP/IT” explainer (coordination, governance, escalation).
+
+Add this content for About (use as seed)
+
+Summary: “I’ve spent my career aligning security and cloud with business outcomes—leading programs in governance, compliance, and secure cloud operations. Today I bring that executive perspective to small businesses that need clear priorities, right-sized controls, and measurable progress—without the cost of a full-time CISO.”
+
+“What this means for you” bullets: executive-ready summaries, simple roadmaps, faster approvals, better vendor answers, clear ownership.
+
+CTAs and friction
+
+Primary: “Book a consultation” (Google Calendar).
+
+Secondary: “Request a tailored quote.”
+
+Short form only; no mandatory long questionnaires upfront. Progressive profiling later.
+
+Guardrails for the AI
+
+Do not list more than 4 credentials in the header or homepage. Use the About accordion for the full list.
+
+Do not use scare tactics. Avoid buzzwords. Explain before persuading.
+
+Optimize for scannability: headings, short paragraphs, bullets, outcome callouts.
+
+Keep copy at ~8th-grade reading level; define terms inline.
+
+Follow-up adjustments to bake in if provided
+
+Exact Google Calendar booking link
+
+Preferred 4 credentials to display in the trust bar (default: CISSP, CISM, CIPM, CCSP)
+
+Any headshot, brand color tweaks, or logo file to replace placeholders
+
+Why this works for SMB buyers
+
+It reduces cognitive load by explaining roles and outcomes in plain English.
+
+It signals depth without overwhelming: four badges + a full list for due diligence.
+
+It gives a clear path to action with low friction and transparent expectations.
+
+Quick questions to finalize the trust bar and contact
+
+Which 4 credentials do you want designated for the trust bar? My default pick: CISSP, CISM, CIPM, CCSP.
+
+What email and phone should appear on Contact? Currently using placeholders.
+
+Do you want the credential accordion on About to default to collapsed or partially open?
+
+If you’d like, I can now:
+
+Draft the one-page printable service brief copy (PDF layout text) ready to paste.
+
+Provide a site.config.ts example (org name, region, contact, calendar link, trust bar certs).

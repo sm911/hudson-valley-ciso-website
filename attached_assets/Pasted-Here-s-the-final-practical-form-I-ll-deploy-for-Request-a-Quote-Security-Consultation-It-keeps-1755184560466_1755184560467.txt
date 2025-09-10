@@ -1,0 +1,223 @@
+Here’s the final, practical form I’ll deploy for “Request a Quote / Security Consultation.” It keeps friction low while giving me just enough signal to qualify and route leads.
+
+Form title and intro
+
+Title: Request a Security Consultation
+
+Sub-text (small): I respond within one business day. Your information is confidential.
+
+Fields (exact labels, order, and rules)
+
+Full name (required)
+
+Type: text
+
+Placeholder: “First and last name”
+
+Validation: 2+ words preferred; strip leading/trailing spaces
+
+Work email (required)
+
+Type: email
+
+Placeholder: “you@company.com”
+
+Validation: RFC-compliant email; reject disposable domains
+
+Company (optional)
+
+Type: text
+
+Placeholder: “Company name (optional)”
+
+Phone (optional, recommended for urgent cases)
+
+Type: tel
+
+Placeholder: “(###) ###-####”
+
+Help text (small): “Optional — useful if your request is time-sensitive.”
+
+What do you need help with? (required; choose one)
+
+Type: radio (single-select)
+
+Options:
+
+“vCISO leadership & ongoing guidance”
+
+“Security assessment / risk review”
+
+“Compliance & audit readiness (HIPAA, SOC 2, PCI, etc.)”
+
+“Incident response / breach help”
+
+“Cloud & IAM / Zero Trust”
+
+“Data protection / DLP”
+
+“Not sure — guide me”
+
+Conditional reveal:
+
+If Compliance & audit readiness → show Frameworks in scope (optional, multi-select): HIPAA, SOC 2, PCI, ISO 27001, FERPA, GDPR, Other.
+
+If Incident response / breach help → show Is this active right now? (Yes/No) and a small alert: “If active, mark ‘Yes’ and I’ll prioritize the response.”
+
+Timeline (optional; single-select)
+
+Type: radio
+
+Options: “Urgent (≤72 hours)”, “This month (1–3 weeks)”, “This quarter (1–3 months)”, “Exploring options”
+
+Describe your security needs (required)
+
+Type: multiline textarea
+
+Placeholder: “Briefly describe your goal, systems in scope, compliance drivers, and desired outcome.”
+
+Under-field helper (bulleted, faint):
+
+Goal (e.g., pass audit, reduce risk, respond to incident)
+
+Environment (e.g., cloud(s), endpoints, data types)
+
+Any deadlines or constraints
+
+Attachments (optional)
+
+Type: file (PDF/DOC)
+
+Accept: .pdf, .doc, .docx, .txt
+
+Helper: “Share non-sensitive summaries only. Do not upload secrets or credentials.”
+
+Consent (required checkbox)
+
+Label: “I consent to be contacted about my request and have read the Privacy Policy.” (link “Privacy Policy”)
+
+Submit button
+
+Text: Request Consultation
+
+Microcopy (exact text)
+
+Top badge (small): “I respond within one business day.”
+
+Privacy note (small, under the button): “Your submission is encrypted in transit. I never sell or share your information.”
+
+Incident response inline note (only when selected): “If this is active now, choose ‘Yes’ so I can prioritize.”
+
+Validation & UX details
+
+Inline, field-level errors (plain language):
+
+Name: “Please enter your full name.”
+
+Email: “Please enter a valid work email.”
+
+Need help with: “Please choose the closest fit so I can route this quickly.”
+
+Message: “A brief description helps me prepare the right next step.”
+
+Required fields: Full name, Work email, “What do you need help with?”, Message, Consent.
+
+Keyboard and mobile friendly; single-column layout; clear focus states; labels always visible (no label-only placeholders).
+
+Success state (on submit)
+
+On-page confirmation: “Thank you. I’ve received your request and will reply within one business day.”
+
+Next step CTA: “Prefer to schedule now?” → show scheduler link/button (optional).
+
+Email auto-reply:
+
+Subject: “Hudson Valley CISO — Consultation request received”
+
+Body:
+
+Reiterate receipt and 1-business-day response
+
+For Urgent or Incident response: Yes, include “I’ll prioritize this and reach out promptly.”
+
+Include a scheduler link if available.
+
+Routing & prioritization (back-office)
+
+Tag by selection (e.g., lead:vCISO, lead:Assessment, lead:IR, lead:Compliance:HIPAA).
+
+Flag high-priority if Timeline=Urgent or Incident active=Yes.
+
+Subject line pattern:
+
+[HV-CISO][{Need}][{Urgency}] {Company or Name}
+
+Example: [HV-CISO][Compliance: SOC2][Urgent] Acme Health
+
+Anti-spam & reliability
+
+Use a honeypot field and time-to-complete check; add CAPTCHA only if abuse appears.
+
+Rate-limit by IP; log submissions server-side; send via transactional email (SPF/DKIM/DMARC aligned).
+
+Accessibility
+
+Proper label/for attributes; aria-describedby for help/error text; 4.5:1 contrast; error summaries on submit; success message announced via aria-live.
+
+Analytics to monitor
+
+Views → starts → submits (conversion rate)
+
+Drop-offs by field (especially before “Message”)
+
+Distribution of “Need help with” and “Timeline” for service planning
+
+Urgent/Incident flags over time
+
+Copy block (paste-ready)
+
+Request a Security Consultation
+I respond within one business day. Your information is confidential.
+
+Full name*
+First and last name
+
+Work email*
+you@company.com
+
+Company (optional)
+Company name (optional)
+
+Phone (optional)
+Optional — useful if your request is time-sensitive.
+
+What do you need help with?*
+( ) vCISO leadership & ongoing guidance
+( ) Security assessment / risk review
+( ) Compliance & audit readiness (HIPAA, SOC 2, PCI, etc.)
+( ) Incident response / breach help
+( ) Cloud & IAM / Zero Trust
+( ) Data protection / DLP
+( ) Not sure — guide me
+
+If Compliance selected: Frameworks in scope (optional): HIPAA, SOC 2, PCI, ISO 27001, FERPA, GDPR, Other
+If Incident response selected: Is this active right now? ( ) Yes ( ) No
+If active, I’ll prioritize the response.
+
+Timeline (optional)
+( ) Urgent (≤72 hours) ( ) This month ( ) This quarter ( ) Exploring options
+
+Describe your security needs*
+Briefly describe your goal, systems in scope, compliance drivers, and desired outcome.
+• Goal (e.g., pass audit, reduce risk, respond to incident)
+• Environment (cloud(s), endpoints, data types)
+• Deadlines or constraints
+
+Attachments (optional)
+Share non-sensitive summaries only. Do not upload secrets or credentials. [Upload]
+
+☐ I consent to be contacted about my request and have read the Privacy Policy.*
+
+[Request Consultation]
+
+Your submission is encrypted in transit. I never sell or share your information.
